@@ -9,5 +9,8 @@
 - Day 5: https://editor.p5js.org/shawn/sketches/PGQBmmjQO - FFT to tone generation on audio stream
 - Day 6: https://editor.p5js.org/shawn/sketches/pjcyWi2Ag - Position
 - Day 7: https://editor.p5js.org/shawn/sketches/8pVLHCGJE - Positional audio
+- Day 8: https://editor.p5js.org/shawn/sketches/2WQWeE3g9 - 3D Positional Audio (WIP)
+- Day 9: https://docs.google.com/document/d/120ZwgmRHu_I1goD1NEJpP4BQfW46Ax8nGfhjndWMPoM/edit# - p5LiveMedia Workshop + Examples
+
 
 
