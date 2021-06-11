@@ -1,7 +1,6 @@
 /*  
   Day 11 of 50 Days of Video Chat
   Sounds mixed in with microphone
-  press mouse to play
   Inspired by Sam Lavigne's Zoom Escaper:
   https://lav.io/projects/zoom-escaper/
 */
@@ -10,11 +9,22 @@ let allVideos = {};
 let myVideo;
 var audioCtx;
 var audiotoload;
+var button;
+var start;
 
 let p5l;
 
 function setup() {
   createCanvas(1, 1);
+
+  // AudioContext start workaround
+  start = createButton("Start");
+  start.mousePressed(init); 
+}
+
+function init() {
+  button = createButton("Play");
+  button.mousePressed(buttonPressed);
     
   audioCtx = new AudioContext();
   audiotoload = document.getElementById("audiotoplay");	
@@ -47,7 +57,7 @@ function setup() {
       allVideos['me'] = myVideo;
     }
   );  
-  myVideo.elt.muted = true;   
+  myVideo.elt.muted = true;  
 }
 
 function draw() {  
@@ -63,6 +73,6 @@ function gotDisconnect(id) {
   delete allVideos[id]; 
 }
 
-function mousePressed() {
+function buttonPressed() {
   audiotoload.play();  
 }
