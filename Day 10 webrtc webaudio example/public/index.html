@@ -1,0 +1,245 @@
+<html>
+	<head>
+	 	<script src="simplepeer.min.js"></script>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	
+		<script type="text/javascript">
+				
+			let simplepeers = [];
+			var socket;
+			var mystream;
+			var osc;
+			var audioContext;
+			var gainNode;
+			
+			window.addEventListener('load', function() {
+				
+				// This kicks it off
+				initCapture();
+				
+				document.getElementById('play').addEventListener('click', function() {
+					osc = audioContext.createOscillator();
+					osc.connect(gainNode);
+					osc.frequency.value = 550;
+					osc.start();
+					setTimeout(function() { osc.stop(); }, 500);
+				})
+
+			});
+
+			function initCapture() {
+				console.log("initCapture");
+				
+				// The video element on the page to display the webcam
+				let video = document.getElementById('myvideo');
+
+				// Constraints - what do we want?
+				let constraints = { audio: true, video: true }
+
+				// Prompt the user for permission, get the stream
+				navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+
+					audioContext = new AudioContext();	
+					var audioSource = audioContext.createMediaStreamSource(stream);
+					// This can combine audio streams
+					gainNode = audioContext.createGain();
+					audioSource.connect(gainNode);
+
+					// Oscillator in button event
+
+					//gainNode.connect(audioContext.destination);
+
+					var newStream = audioContext.createMediaStreamDestination();  
+					gainNode.connect(newStream);
+					//newStream.stream
+
+					let videoTracks = stream.getVideoTracks();
+					if (videoTracks.length > 0) {
+						newStream.stream.addTrack(videoTracks[0]);
+					}
+
+					/* Use the stream */
+
+					// Global object
+					mystream = newStream.stream;
+
+					// Attach to our video object
+					video.srcObject = stream;
+					
+					// Wait for the stream to load enough to play
+					video.onloadedmetadata = function(e) {
+						video.play();
+					};
+
+					// Now setup socket
+					setupSocket();
+				})
+				.catch(function(err) {
+					/* Handle the error */
+					alert(err);  
+				});	
+			}
+
+			function setupSocket() {
+				socket = io.connect();
+				
+				socket.on('connect', function() {
+					console.log("Socket Connected");
+					console.log("My socket id: ", socket.id);
+
+					// Tell the server we want a list of the other users
+					socket.emit('list');
+				});
+
+				socket.on('disconnect', function(data) {
+					console.log("Socket disconnected");
+				});
+
+				socket.on('peer_disconnect', function(data) {
+					console.log("simplepeer has disconnected " + data);
+					for (let i = 0; i < simplepeers.length; i++) {
+						if (simplepeers[i].socket_id == data) {
+							console.log("Removing simplepeer: " + i);
+							simplepeers.splice(i,1);
+							// Should also remove video from page
+							document.getElementById(data).remove();
+						} 
+					}			
+				});			
+
+				// Receive listresults from server
+				socket.on('listresults', function (data) {
+					console.log(data);
+					for (let i = 0; i < data.length; i++) {
+						// Make sure it's not us
+						if (data[i] != socket.id) {	
+
+							// create a new simplepeer and we'll be the "initiator"			
+							let simplepeer = new SimplePeerWrapper(
+								true, data[i], socket, mystream
+							);
+
+							// Push into our array
+							simplepeers.push(simplepeer);	
+						}
+					}
+				});
+				
+				socket.on('signal', function(to, from, data) {
+				
+					console.log("Got a signal from the server: ", to, from, data);
+
+					// to should be us
+					if (to != socket.id) {
+						console.log("Socket IDs don't match");
+					}
+				
+					// Look for the right simplepeer in our array
+					let found = false;
+					for (let i = 0; i < simplepeers.length; i++)
+					{
+						
+						if (simplepeers[i].socket_id == from) {
+							console.log("Found right object");
+							// Give that simplepeer the signal
+							simplepeers[i].inputsignal(data);
+							found = true;
+							break;
+						}
+					
+					}	
+					if (!found) {
+						console.log("Never found right simplepeer object");
+						// Let's create it then, we won't be the "initiator"
+						let simplepeer = new SimplePeerWrapper(
+							false, from, socket, mystream
+						);
+						
+						// Push into our array
+						simplepeers.push(simplepeer);	
+							
+						// Tell the new simplepeer that signal
+						simplepeer.inputsignal(data);
+					}
+				});
+
+			}
+
+			// A wrapper for simplepeer as we need a bit more than it provides
+			class SimplePeerWrapper {
+
+ 				constructor(initiator, socket_id, socket, stream) {
+					this.simplepeer = new SimplePeer({
+						initiator: initiator,
+						trickle: false
+					});				
+
+					// Their socket id, our unique id for them
+					this.socket_id = socket_id;
+
+					// Socket.io Socket
+					this.socket = socket;
+
+					// Our video stream - need getters and setters for this
+					this.stream = stream;
+
+					// simplepeer generates signals which need to be sent across socket
+					this.simplepeer.on('signal', data => {						
+						this.socket.emit('signal', this.socket_id, this.socket.id, data);
+					});
+
+					// When we have a connection, send our stream
+					this.simplepeer.on('connect', () => {
+						console.log('CONNECT')
+						console.log(this.simplepeer);
+						//p.send('whatever' + Math.random())
+
+						// Let's give them our stream
+						this.simplepeer.addStream(stream);
+						console.log("Send our stream");
+					});
+
+					// Stream coming in to us
+					this.simplepeer.on('stream', stream => {
+						console.log('Incoming Stream');
+
+						// This should really be a callback
+						// Create a video object
+						let ovideo = document.createElement("VIDEO");
+						ovideo.id = this.socket_id;
+						ovideo.srcObject = stream;
+						ovideo.muted = false;
+						ovideo.onloadedmetadata = function(e) {
+							ovideo.play();
+						};					
+						document.body.appendChild(ovideo);
+						console.log(ovideo);
+					});		
+					
+					this.simplepeer.on('close', () => {
+						console.log('Got close event');
+						// Should probably remove from the array of simplepeers
+					});
+
+					this.simplepeer.on('error', (err) => {
+						console.log(err);
+					});
+				}
+  
+				inputsignal(sig) {
+					this.simplepeer.signal(sig);
+				}
+
+			}			
+
+		</script>
+	</head>
+  <body>
+	<div>
+		My Video:
+		<video id="myvideo" width="400" height="300" muted></video>
+	</div>
+	<input type="button" id="play" value="play">
+
+  </body>
+</html>

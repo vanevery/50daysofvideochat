@@ -11,6 +11,8 @@
 - Day 7: https://editor.p5js.org/shawn/sketches/8pVLHCGJE - Positional audio
 - Day 8: https://editor.p5js.org/shawn/sketches/2WQWeE3g9 - 3D Positional Audio (WIP)
 - Day 9: https://docs.google.com/document/d/120ZwgmRHu_I1goD1NEJpP4BQfW46Ax8nGfhjndWMPoM/edit# - p5LiveMedia Workshop + Examples
+- Day 10:  - Playing an oscillator in a stream - straight JavaScript (not p5LiveMedia)
+- Day 11:
 
 
 
