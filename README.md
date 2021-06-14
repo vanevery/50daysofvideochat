@@ -15,6 +15,8 @@
 - Day 11: https://walking-productions.com/50days/Day_11_50_Days_of_Video_Chat/ - Playing an audio file in a stream
 - Day 12: https://editor.p5js.org/shawn/sketches/DmsCQtcZG - Basic 2D Space Sharing
 - Day 13: https://editor.p5js.org/shawn/sketches/AitJTA03B - Manipulation of stream before sending - Shared canvas
+- Day 14: https://editor.p5js.org/shawn/sketches/IRxcvNvnF - Manipulation of stream before sending - Shared canvas - Another version
+(Need to work out transparency in transmission - maybe a specific color for that?)
 
 
 
