@@ -19,6 +19,8 @@
 (Need to work out transparency in transmission - maybe a specific color for that?)
 - Day 15: https://editor.p5js.org/shawn/sketches/ME86kAwkK - Greenscreen - sort of - no transparency :-(
 - Day 16: https://editor.p5js.org/shawn/sketches/B2RkDAfrM - BodyPix from ml5 for background removal
+- Day 17: https://editor.p5js.org/shawn/sketches/9pCDDRXBO - MediaRecorder
+- Day 18: https://editor.p5js.org/shawn/sketches/8e2KXcA8P - A-FrameP5 3D Video Chat (work in progress - no sending of movement data just yet)
 
 
 
