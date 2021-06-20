@@ -21,6 +21,8 @@
 - Day 16: https://editor.p5js.org/shawn/sketches/B2RkDAfrM - BodyPix from ml5 for background removal
 - Day 17: https://editor.p5js.org/shawn/sketches/9pCDDRXBO - MediaRecorder
 - Day 18: https://editor.p5js.org/shawn/sketches/8e2KXcA8P - A-FrameP5 3D Video Chat (work in progress - no sending of movement data just yet)
+- Day 19: https://editor.p5js.org/shawn/sketches/oy9gPIImS - Bitrate Modification - Most code in underlying library: p5livemedia
+
 
 
 
