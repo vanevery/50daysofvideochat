@@ -17,11 +17,14 @@
 - Day 13: https://editor.p5js.org/shawn/sketches/AitJTA03B - Manipulation of stream before sending - Shared canvas
 - Day 14: https://editor.p5js.org/shawn/sketches/IRxcvNvnF - Manipulation of stream before sending - Shared canvas - Another version
 (Need to work out transparency in transmission - maybe a specific color for that?)
-- Day 15: https://editor.p5js.org/shawn/sketches/ME86kAwkK - Greenscreen - sort of - no transparency :-(
-- Day 16: https://editor.p5js.org/shawn/sketches/B2RkDAfrM - BodyPix from ml5 for background removal
-- Day 17: https://editor.p5js.org/shawn/sketches/9pCDDRXBO - MediaRecorder
-- Day 18: https://editor.p5js.org/shawn/sketches/8e2KXcA8P - A-FrameP5 3D Video Chat (work in progress - no sending of movement data just yet)
+- Day 15: https://editor.p5js.org/shawn/sketches/ME86kAwkK - Greenscreen - sort of - no transparency :-( - Work in Progress!
+- Day 16: https://editor.p5js.org/shawn/sketches/B2RkDAfrM - BodyPix from ml5 for background removal - Sloooooow
+- Day 17: https://editor.p5js.org/shawn/sketches/9pCDDRXBO - MediaRecorder - Local saving only
+- Day 18: https://editor.p5js.org/shawn/sketches/8e2KXcA8P - A-FrameP5 3D Video Chat
 - Day 19: https://editor.p5js.org/shawn/sketches/oy9gPIImS - Bitrate Modification - Most code in underlying library: p5livemedia
+- Day 20: https://editor.p5js.org/shawn/sketches/UBFdh8X9- - Bitrate Modification, Audio and Video - Most code in underlying library: p5livemedia
+- Day 21: Fixed up Day 18 Sketch to send position
+- Day 22: 
 
 
 
